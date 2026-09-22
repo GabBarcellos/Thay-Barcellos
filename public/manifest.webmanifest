@@ -1,0 +1,17 @@
+{
+  "name": "Thay Naills",
+  "short_name": "Thay Naills",
+  "description": "Sistema de agendamento profissional.",
+  "start_url": "/admin",
+  "display": "standalone",
+  "background_color": "#fff7f5",
+  "theme_color": "#b0486e",
+  "icons": [
+    {
+      "src": "/app-icon.svg?v=4",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

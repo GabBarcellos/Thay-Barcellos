@@ -1,0 +1,1 @@
+ALTER TABLE public.services ADD COLUMN IF NOT EXISTS show_on_homepage BOOLEAN DEFAULT true;

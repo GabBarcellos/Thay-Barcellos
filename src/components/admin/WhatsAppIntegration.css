@@ -1,0 +1,35 @@
+/* WhatsAppIntegration.css */
+.whatsapp-story-preview {
+  border-color: #111827 !important;
+}
+
+.whatsapp-story-content {
+  background: linear-gradient(180deg, #9b2c2c 0%, #7c3aed 100%) !important;
+}
+
+.whatsapp-story-bubble {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.whatsapp-sticker {
+  background-color: #facc15 !important;
+  color: #713f12 !important;
+}
+
+.whatsapp-footer-icon {
+  background-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.whatsapp-footer-line {
+  background-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

@@ -1,0 +1,4 @@
+project_id = "kvzguromaiewthpachsa"
+
+[functions.send-admin-reminders]
+verify_jwt = false
