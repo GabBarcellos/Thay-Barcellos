@@ -9,34 +9,19 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SuperAdminRouteImport } from './routes/super-admin'
-import { Route as ResetPasswordRouteImport } from './routes/reset-password'
-import { Route as LoginRouteImport } from './routes/login'
-import { Route as EngagementRouteImport } from './routes/engagement'
-import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AdminTabletModeRouteImport } from './routes/admin/tablet-mode'
+import { Route as AdminRouteImport } from './routes/admin'
+import { Route as EngagementRouteImport } from './routes/engagement'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as SuperAdminRouteImport } from './routes/super-admin'
 import { Route as AdminServicesRouteImport } from './routes/admin/services'
+import { Route as AdminTabletModeRouteImport } from './routes/admin/tablet-mode'
 import { Route as ApiPublicPushRemindersRouteImport } from './routes/api/public/push/reminders'
 
-const SuperAdminRoute = SuperAdminRouteImport.update({
-  id: '/super-admin',
-  path: '/super-admin',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ResetPasswordRoute = ResetPasswordRouteImport.update({
-  id: '/reset-password',
-  path: '/reset-password',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EngagementRoute = EngagementRouteImport.update({
-  id: '/engagement',
-  path: '/engagement',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminRoute = AdminRouteImport.update({
@@ -44,19 +29,34 @@ const AdminRoute = AdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const EngagementRoute = EngagementRouteImport.update({
+  id: '/engagement',
+  path: '/engagement',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminTabletModeRoute = AdminTabletModeRouteImport.update({
-  id: '/tablet-mode',
-  path: '/tablet-mode',
-  getParentRoute: () => AdminRoute,
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SuperAdminRoute = SuperAdminRouteImport.update({
+  id: '/super-admin',
+  path: '/super-admin',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminServicesRoute = AdminServicesRouteImport.update({
   id: '/services',
   path: '/services',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminTabletModeRoute = AdminTabletModeRouteImport.update({
+  id: '/tablet-mode',
+  path: '/tablet-mode',
   getParentRoute: () => AdminRoute,
 } as any)
 const ApiPublicPushRemindersRoute = ApiPublicPushRemindersRouteImport.update({
@@ -147,32 +147,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/super-admin': {
-      id: '/super-admin'
-      path: '/super-admin'
-      fullPath: '/super-admin'
-      preLoaderRoute: typeof SuperAdminRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/reset-password': {
-      id: '/reset-password'
-      path: '/reset-password'
-      fullPath: '/reset-password'
-      preLoaderRoute: typeof ResetPasswordRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/engagement': {
-      id: '/engagement'
-      path: '/engagement'
-      fullPath: '/engagement'
-      preLoaderRoute: typeof EngagementRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin': {
@@ -182,25 +161,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/engagement': {
+      id: '/engagement'
+      path: '/engagement'
+      fullPath: '/engagement'
+      preLoaderRoute: typeof EngagementRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin/tablet-mode': {
-      id: '/admin/tablet-mode'
-      path: '/tablet-mode'
-      fullPath: '/admin/tablet-mode'
-      preLoaderRoute: typeof AdminTabletModeRouteImport
-      parentRoute: typeof AdminRoute
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/super-admin': {
+      id: '/super-admin'
+      path: '/super-admin'
+      fullPath: '/super-admin'
+      preLoaderRoute: typeof SuperAdminRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/admin/services': {
       id: '/admin/services'
       path: '/services'
       fullPath: '/admin/services'
       preLoaderRoute: typeof AdminServicesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/tablet-mode': {
+      id: '/admin/tablet-mode'
+      path: '/tablet-mode'
+      fullPath: '/admin/tablet-mode'
+      preLoaderRoute: typeof AdminTabletModeRouteImport
       parentRoute: typeof AdminRoute
     }
     '/api/public/push/reminders': {

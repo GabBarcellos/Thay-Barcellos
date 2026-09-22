@@ -17,7 +17,9 @@ function NotFoundComponent() {
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Página não encontrada</h2>
+        <h2 className="mt-4 text-xl font-semibold text-foreground">
+          Página não encontrada
+        </h2>
         <p className="mt-2 text-sm text-muted-foreground">
           A página que você está procurando não existe ou foi movida.
         </p>
@@ -35,7 +37,13 @@ function NotFoundComponent() {
   );
 }
 
-function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
+function ErrorComponent({
+  error,
+  reset,
+}: {
+  error: Error;
+  reset: () => void;
+}) {
   console.error(error);
   const router = useRouter();
 
@@ -46,7 +54,8 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
           Esta página não carregou
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Algo deu errado do nosso lado. Você pode tentar atualizar ou voltar para o início.
+          Algo deu errado do nosso lado. Você pode tentar atualizar ou voltar
+          para o início.
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
@@ -70,7 +79,9 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   );
 }
 
-export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
+export const Route = createRootRouteWithContext<{
+  queryClient: QueryClient;
+}>()({
   head: () => ({
     meta: [
       { charSet: "utf-8" },
@@ -78,28 +89,43 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "theme-color", content: "#b0486e" },
       { name: "mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
-      { name: "apple-mobile-web-app-status-bar-style", content: "default" },
+      {
+        name: "apple-mobile-web-app-status-bar-style",
+        content: "default",
+      },
       { title: "Thay Naills" },
-      { name: "description", content: "Sistema de agendamento profissional." },
-      { name: "author", content: "Lovable" },
+      {
+        name: "description",
+        content: "Sistema de agendamento profissional.",
+      },
+      { name: "author", content: "Thay Barcellos Nails" },
       { property: "og:title", content: "Thay Naills" },
-      { property: "og:description", content: "Sistema de agendamento profissional." },
+      {
+        property: "og:description",
+        content: "Sistema de agendamento profissional.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
       { name: "twitter:title", content: "Thay Naills" },
-      { name: "twitter:description", content: "Sistema de agendamento profissional." },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/HygV4uHcOFSNeuKTi8OjfapEwz32/social-images/social-1780664789077-175393251-unha-polonês-clipart-unha-polonês-colorido-plana-vector-ícone.webp" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/HygV4uHcOFSNeuKTi8OjfapEwz32/social-images/social-1780664789077-175393251-unha-polonês-clipart-unha-polonês-colorido-plana-vector-ícone.webp" },
+      {
+        name: "twitter:description",
+        content: "Sistema de agendamento profissional.",
+      },
     ],
     links: [
       { rel: "icon", type: "image/svg+xml", href: "/app-icon.svg?v=4" },
       { rel: "apple-touch-icon", href: "/app-icon.svg?v=4" },
-      { rel: "apple-touch-icon-precomposed", href: "/app-icon.svg?v=4" },
+      {
+        rel: "apple-touch-icon-precomposed",
+        href: "/app-icon.svg?v=4",
+      },
       { rel: "manifest", href: "/manifest.webmanifest" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
-      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap",
+      },
       {
         rel: "stylesheet",
         href: appCss,
@@ -132,13 +158,16 @@ function RootComponent() {
   useEffect(() => {
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("/sw.js").catch(() => {
-        console.error("Não foi possível ativar as notificações do aplicativo.");
+        console.error(
+          "Não foi possível ativar as notificações do aplicativo.",
+        );
       });
     }
 
     const isInstalledApp =
       window.matchMedia("(display-mode: standalone)").matches ||
-      (window.navigator as Navigator & { standalone?: boolean }).standalone === true;
+      (window.navigator as Navigator & { standalone?: boolean }).standalone ===
+        true;
 
     if (!isInstalledApp) return;
 
