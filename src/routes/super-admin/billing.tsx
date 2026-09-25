@@ -59,6 +59,7 @@ function BillingAdminPage() {
           name: plan.name,
           description: plan.description || null,
           monthlyPriceCents: Math.round(Number(plan.monthly_price_cents)),
+          annualPriceCents: Math.round(Number(plan.annual_price_cents)),
           customDomain: !!plan.custom_domain,
           active: !!plan.active,
         },
@@ -86,7 +87,7 @@ function BillingAdminPage() {
               <div><Label>Código</Label><Input value={plan.code} disabled /></div>
               <div><Label>Nome</Label><Input value={plan.name} onChange={e => setPlans(x => x.map(p => p.id === plan.id ? {...p,name:e.target.value} : p))} /></div>
               <div><Label>Preço mensal (R$)</Label><Input type="number" min="1" step="0.01" value={Number(plan.monthly_price_cents || 0) / 100} onChange={e => setPlans(x => x.map(p => p.id === plan.id ? {...p,monthly_price_cents: Math.round(Number(e.target.value || 0) * 100)} : p))} /></div>
-              <div><Label>Domínio próprio</Label><Input value={plan.custom_domain ? "Sim" : "Não"} disabled /></div>
+              <div><Label>Preço anual (R$)</Label><Input type="number" min="1" step="0.01" value={Number(plan.annual_price_cents || 0) / 100} onChange={e => setPlans(x => x.map(p => p.id === plan.id ? {...p,annual_price_cents: Math.round(Number(e.target.value || 0) * 100)} : p))} /></div>\n              <div><Label>Domínio próprio</Label><Input value={plan.custom_domain ? "Sim" : "Não"} disabled /></div>
               <div><Label>Status</Label><Button variant={plan.active ? "default" : "outline"} onClick={() => setPlans(x => x.map(p => p.id === plan.id ? {...p,active:!p.active} : p))}>{plan.active ? "Ativo" : "Inativo"}</Button></div>
               <Button disabled={saving === plan.id || !plan.monthly_price_cents} onClick={() => save(plan)}>{saving === plan.id ? "Salvando..." : "Salvar"}</Button>
             </div>
