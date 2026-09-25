@@ -19,7 +19,7 @@ export const listTenants = createServerFn({ method: "GET" })
     await assertSuperAdmin(context.supabase, context.userId);
     const { data, error } = await supabaseAdmin
       .from("tenants")
-      .select("id, slug, business_name, active, owner_user_id, created_at, username, recovery_email, expires_at, deleted_at")
+      .select("id, slug, business_name, active, owner_user_id, created_at, username, recovery_email, expires_at, deleted_at, plan_code, license_status, license_valid_until, billing_email, mp_preapproval_id")
       .is("deleted_at", null)
       .order("created_at", { ascending: false });
     if (error) throw new Error(error.message);
