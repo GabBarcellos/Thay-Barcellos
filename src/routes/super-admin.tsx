@@ -398,6 +398,9 @@ function SuperAdminPage() {
             <h1 className="font-serif text-2xl sm:text-3xl text-primary mt-1">Painel Super-Admin</h1>
           </div>
           <div className="flex items-center gap-2">
+            <Button variant="outline" onClick={() => navigate({ to: "/super-admin/billing" })} className="rounded-full gap-2">
+              Cobrança
+            </Button>
             <Button variant="outline" onClick={openSupport} className="rounded-full gap-2">
               <LifeBuoy className="w-4 h-4" /> Suporte
               {tenants.length === 0 ? null : null}
