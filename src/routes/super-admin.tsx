@@ -40,7 +40,7 @@ import {
 import { toast } from "sonner";
 import {
   Plus, KeyRound, Trash2, Power, ArrowLeft, Copy, ExternalLink,
-  RotateCcw, Edit, Eye, EyeOff, CalendarClock, Shield, SlidersHorizontal,
+  RotateCcw, Edit, CalendarClock, Shield, SlidersHorizontal,
   Search, Users, Ban, ArchiveRestore, AlertTriangle,
   ImageIcon, Upload, Loader2, LifeBuoy, Bug, Sparkles, HelpCircle, Check, Star, Bell,
 } from "lucide-react";
@@ -57,7 +57,6 @@ type Tenant = {
   owner_user_id: string;
   created_at: string | null;
   username: string | null;
-  raw_password: string | null;
   recovery_email: string | null;
   expires_at: string | null;
   deleted_at?: string | null;
@@ -121,7 +120,6 @@ function SuperAdminPage() {
   const [search, setSearch] = useState("");
   const [createOpen, setCreateOpen] = useState(false);
   const [editTarget, setEditTarget] = useState<Tenant | null>(null);
-  const [showPasswords, setShowPasswords] = useState<Record<string, boolean>>({});
   const [resetTarget, setResetTarget] = useState<Tenant | null>(null);
   const [expiryTarget, setExpiryTarget] = useState<Tenant | null>(null);
   const [expiryDate, setExpiryDate] = useState("");
@@ -248,7 +246,6 @@ function SuperAdminPage() {
       toast.success("Informações atualizadas!"); setEditTarget(null); refresh();
     } catch (e: any) { toast.error(e?.message || "Erro"); } finally { setSaving(false); }
   }
-  function togglePassword(id: string) { setShowPasswords(p => ({ ...p, [id]: !p[id] })); }
   function openEdit(t: Tenant) {
     setEditTarget(t);
     setEditForm({ username: t.username || "", businessName: t.business_name, slug: t.slug, recoveryEmail: t.recovery_email || "" });
@@ -466,7 +463,6 @@ function SuperAdminPage() {
               ? <EmptyState message={search ? "Nenhuma conta encontrada." : "Nenhuma conta ativa."} />
               : visibleActive.map((t) => (
                 <TenantCard key={t.id} t={t} mode="active"
-                  showPassword={!!showPasswords[t.id]} onTogglePw={() => togglePassword(t.id)}
                   onEdit={() => openEdit(t)} onResetPw={() => setResetTarget(t)}
                   onExpiry={() => openExpiry(t)} onPerms={() => openPerms(t)}
                   onQuickExtend={(d) => quickExtend(t, d)} onToggle={() => handleToggle(t)}
@@ -481,7 +477,6 @@ function SuperAdminPage() {
               ? <EmptyState message="Nenhuma conta bloqueada." />
               : visibleBlocked.map((t) => (
                 <TenantCard key={t.id} t={t} mode="blocked"
-                  showPassword={!!showPasswords[t.id]} onTogglePw={() => togglePassword(t.id)}
                   onEdit={() => openEdit(t)} onResetPw={() => setResetTarget(t)}
                   onExpiry={() => openExpiry(t)} onPerms={() => openPerms(t)}
                   onQuickExtend={(d) => quickExtend(t, d)} onToggle={() => handleToggle(t)}
@@ -829,11 +824,11 @@ function EmptyState({ message }: { message: string }) {
 }
 
 function TenantCard({
-  t, mode, showPassword, onTogglePw, onEdit, onResetPw, onExpiry, onPerms,
+  t, mode, onEdit, onResetPw, onExpiry, onPerms,
   onQuickExtend, onToggle, onResetData, onDelete, onCopyLink, onBackgrounds,
 }: {
-  t: Tenant; mode: "active" | "blocked"; showPassword: boolean;
-  onTogglePw: () => void; onEdit: () => void; onResetPw: () => void;
+  t: Tenant; mode: "active" | "blocked";
+  onEdit: () => void; onResetPw: () => void;
   onExpiry: () => void; onPerms: () => void;
   onQuickExtend: (days: number | null) => void;
   onToggle: () => void; onResetData: () => void; onDelete: () => void; onCopyLink: () => void;
@@ -873,9 +868,6 @@ function TenantCard({
             <ActionChip onClick={onCopyLink} icon={<Copy className="w-3.5 h-3.5" />} label="Copiar link" />
             <ActionChip as="a" href={`/?t=${t.slug}`} target="_blank" rel="noopener noreferrer"
               icon={<ExternalLink className="w-3.5 h-3.5" />} label="Abrir página" />
-            <ActionChip onClick={onTogglePw}
-              icon={showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
-              label={showPassword ? "Ocultar senha" : "Ver senha"} />
           </ActionGroup>
 
           {/* Acesso & permissões */}
@@ -906,13 +898,6 @@ function TenantCard({
             <ActionChip onClick={onDelete} icon={<Trash2 className="w-3.5 h-3.5" />} label="Mover p/ lixeira" tone="red" />
           </ActionGroup>
         </div>
-
-        {showPassword && (
-          <div className="mt-3 px-3 py-2 bg-gray-50 rounded-xl text-xs font-mono flex items-center justify-between">
-            <span>Senha: {t.raw_password || "—"}</span>
-            <button onClick={onTogglePw} className="text-primary"><EyeOff className="w-3 h-3" /></button>
-          </div>
-        )}
       </CardContent>
     </Card>
   );
