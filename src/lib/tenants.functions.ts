@@ -19,7 +19,7 @@ export const listTenants = createServerFn({ method: "GET" })
     await assertSuperAdmin(context.supabase, context.userId);
     const { data, error } = await supabaseAdmin
       .from("tenants")
-      .select("id, slug, business_name, active, owner_user_id, created_at, username, raw_password, recovery_email, expires_at, deleted_at")
+      .select("id, slug, business_name, active, owner_user_id, created_at, username, recovery_email, expires_at, deleted_at")
       .is("deleted_at", null)
       .order("created_at", { ascending: false });
     if (error) throw new Error(error.message);
@@ -63,7 +63,7 @@ export const listDeletedTenants = createServerFn({ method: "GET" })
     await assertSuperAdmin(context.supabase, context.userId);
     const { data, error } = await supabaseAdmin
       .from("tenants")
-      .select("id, slug, business_name, active, owner_user_id, created_at, username, raw_password, recovery_email, expires_at, deleted_at")
+      .select("id, slug, business_name, active, owner_user_id, created_at, username, recovery_email, expires_at, deleted_at")
       .not("deleted_at", "is", null)
       .order("deleted_at", { ascending: false });
     if (error) throw new Error(error.message);
@@ -116,7 +116,6 @@ export const createTenantAccount = createServerFn({ method: "POST" })
         slug: data.slug, 
         business_name: data.businessName,
         username: data.username,
-        raw_password: data.password,
         recovery_email: recovery,
       });
     if (tErr) {
@@ -182,12 +181,6 @@ export const resetTenantPassword = createServerFn({ method: "POST" })
     });
     if (error) throw new Error(error.message);
 
-    // Update raw_password in tenants table for visibility
-    const { error: tErr } = await supabaseAdmin
-      .from("tenants")
-      .update({ raw_password: data.password })
-      .eq("owner_user_id", data.userId);
-    if (tErr) throw new Error("Erro ao atualizar registro da senha: " + tErr.message);
 
     return { ok: true };
   });
@@ -306,58 +299,6 @@ export const setTenantPermissions = createServerFn({ method: "POST" })
       );
     if (error) throw new Error(error.message);
     return { ok: true };
-  });
-
-// Bootstrap (idempotent, PUBLIC): create the hardcoded "admin" super-admin
-// account if it doesn't exist. Safe to expose because credentials and role
-// are fixed; repeated calls are no-ops (only resync password/role).
-export const bootstrapAdminUser = createServerFn({ method: "POST" })
-  .handler(async () => {
-    const username = "admin";
-    const password = "@Thayna202301";
-    const email = `${username}@thaynails.local`;
-
-    const { data: existing } = await supabaseAdmin
-      .from("tenants")
-      .select("owner_user_id")
-      .eq("username", username)
-      .maybeSingle();
-    if (existing) {
-      // Ensure super_admin role and password are in sync
-      await supabaseAdmin.auth.admin.updateUserById(existing.owner_user_id, { password, email_confirm: true });
-      await supabaseAdmin
-        .from("user_roles")
-        .upsert({ user_id: existing.owner_user_id, role: "super_admin" }, { onConflict: "user_id,role" });
-      await supabaseAdmin.from("tenants").update({ raw_password: password }).eq("owner_user_id", existing.owner_user_id);
-      return { ok: true, created: false };
-    }
-
-    const { data: created, error: cErr } = await supabaseAdmin.auth.admin.createUser({
-      email,
-      password,
-      email_confirm: true,
-    });
-    if (cErr || !created.user) throw new Error(cErr?.message || "Falha ao criar usuário admin");
-    const newUserId = created.user.id;
-
-    const { error: tErr } = await supabaseAdmin.from("tenants").insert({
-      owner_user_id: newUserId,
-      slug: "admin-geral",
-      business_name: "Administrador Geral",
-      username,
-      raw_password: password,
-    });
-    if (tErr) {
-      await supabaseAdmin.auth.admin.deleteUser(newUserId);
-      throw new Error("Falha ao registrar admin: " + tErr.message);
-    }
-
-    const { error: rErr } = await supabaseAdmin
-      .from("user_roles")
-      .insert({ user_id: newUserId, role: "super_admin" });
-    if (rErr) throw new Error(rErr.message);
-
-    return { ok: true, created: true };
   });
 
 // PUBLIC: translate a username to its current auth email (so the login form
