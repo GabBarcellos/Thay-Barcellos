@@ -46,6 +46,10 @@ async function handle(request: Request) {
   const ts = sig.ts || "";
   const v1 = sig.v1 || "";
   if (!ts || !v1 || !requestId) return json({ error: "Assinatura ausente." }, 401);
+  const timestamp = Number(ts);
+  if (!Number.isFinite(timestamp) || Math.abs(Date.now() / 1000 - timestamp) > 300) {
+    return json({ error: "Assinatura expirada." }, 401);
+  }
 
   const manifest = "id:" + resourceId.toLowerCase() + ";request-id:" + requestId + ";ts:" + ts + ";";
   const expected = await hmac(secret, manifest);
