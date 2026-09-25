@@ -309,7 +309,7 @@ export const getAuthEmailByUsername = createServerFn({ method: "POST" })
     const username = data.username.trim().toLowerCase();
     const { data: tenant } = await supabaseAdmin
       .from("tenants")
-      .select("owner_user_id, active, expires_at, username, deleted_at")
+      .select("owner_user_id, active, expires_at, username, deleted_at, license_status")
       .eq("username", username)
       .maybeSingle();
     if (!tenant) return { email: `${username}@thaynails.local` };
@@ -326,6 +326,9 @@ export const getAuthEmailByUsername = createServerFn({ method: "POST" })
       }
       if (tenant.active === false) {
         throw new Error("Conta suspensa. Entre em contato com o administrador.");
+      }
+      if (tenant.license_status && !["active"].includes(tenant.license_status)) {
+        throw new Error("Sua licença não está ativa. Entre em contato com o administrador.");
       }
       if (tenant.expires_at && new Date(tenant.expires_at).getTime() < Date.now()) {
         throw new Error("Seu plano expirou. Entre em contato com o administrador para renovar.");
