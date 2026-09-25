@@ -24,6 +24,7 @@ export const updateBillingPlan = createServerFn({ method: "POST" })
     name: z.string().min(2).max(100),
     description: z.string().max(500).nullable(),
     monthlyPriceCents: z.number().int().min(1).max(100000000),
+    annualPriceCents: z.number().int().min(1).max(100000000),
     customDomain: z.boolean(),
     active: z.boolean(),
   }).parse(d))
@@ -33,6 +34,7 @@ export const updateBillingPlan = createServerFn({ method: "POST" })
       name: data.name,
       description: data.description,
       monthly_price_cents: data.monthlyPriceCents,
+      annual_price_cents: data.annualPriceCents,
       custom_domain: data.customDomain,
       active: data.active,
       updated_at: new Date().toISOString(),
