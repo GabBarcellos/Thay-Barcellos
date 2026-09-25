@@ -83,7 +83,7 @@ function BillingAdminPage() {
 
         <Card><CardHeader><CardTitle>Planos</CardTitle></CardHeader><CardContent className="space-y-4">
           {plans.map((plan) => (
-            <div key={plan.id} className="grid grid-cols-1 md:grid-cols-6 gap-3 items-end border rounded-xl p-4 bg-white">
+            <div key={plan.id} className="grid grid-cols-1 md:grid-cols-7 gap-3 items-end border rounded-xl p-4 bg-white">
               <div><Label>Código</Label><Input value={plan.code} disabled /></div>
               <div><Label>Nome</Label><Input value={plan.name} onChange={e => setPlans(x => x.map(p => p.id === plan.id ? {...p,name:e.target.value} : p))} /></div>
               <div><Label>Preço mensal (R$)</Label><Input type="number" min="1" step="0.01" value={Number(plan.monthly_price_cents || 0) / 100} onChange={e => setPlans(x => x.map(p => p.id === plan.id ? {...p,monthly_price_cents: Math.round(Number(e.target.value || 0) * 100)} : p))} /></div>
