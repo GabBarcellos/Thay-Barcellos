@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate, redirect } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, redirect, Link } from "@tanstack/react-router";
 import { useState, type FormEvent, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useServerFn } from "@tanstack/react-start";
@@ -199,6 +199,9 @@ function LoginPage() {
               ) : "Entrar"}
             </Button>
           </form>
+          <div className="mt-5 text-center">
+            <Link to="/planos" className="text-sm text-primary hover:underline">Conheça os planos</Link>
+          </div>
         </CardContent>
       </Card>
 
