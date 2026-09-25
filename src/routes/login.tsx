@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate, redirect } from "@tanstack/react-router";
 import { useState, type FormEvent, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useServerFn } from "@tanstack/react-start";
-import { getAuthEmailByUsername, requestPasswordReset, bootstrapAdminUser } from "@/lib/tenants.functions";
+import { getAuthEmailByUsername, requestPasswordReset } from "@/lib/tenants.functions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -37,7 +37,6 @@ function LoginPage() {
   const navigate = useNavigate();
   const lookupEmailFn = useServerFn(getAuthEmailByUsername);
   const requestResetFn = useServerFn(requestPasswordReset);
-  const bootstrapFn = useServerFn(bootstrapAdminUser);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(true);
@@ -48,7 +47,6 @@ function LoginPage() {
   const [forgotLoading, setForgotLoading] = useState(false);
 
   useEffect(() => {
-    bootstrapFn().catch(() => {});
     let active = true;
 
     const restoreSession = async () => {
@@ -75,7 +73,7 @@ function LoginPage() {
       active = false;
       authListener.subscription.unsubscribe();
     };
-  }, [bootstrapFn, navigate]);
+  }, [navigate]);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
