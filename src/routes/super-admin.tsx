@@ -16,7 +16,6 @@ import {
   updateTenantInfo,
   setTenantExpiry,
   setTenantPermissions,
-  bootstrapAdminUser,
   listTenantBackgrounds,
   addTenantBackground,
   deleteTenantBackground,
@@ -105,7 +104,6 @@ function SuperAdminPage() {
   const updateInfoFn = useServerFn(updateTenantInfo);
   const setExpiryFn = useServerFn(setTenantExpiry);
   const setPermsFn = useServerFn(setTenantPermissions);
-  const bootstrapFn = useServerFn(bootstrapAdminUser);
   const listBgFn = useServerFn(listTenantBackgrounds);
   const addBgFn = useServerFn(addTenantBackground);
   const delBgFn = useServerFn(deleteTenantBackground);
@@ -293,14 +291,6 @@ function SuperAdminPage() {
       toast.success("Permissões atualizadas"); setPermsTarget(null); refresh();
     } catch (err: any) { toast.error(err?.message || "Erro"); } finally { setSaving(false); }
   }
-  async function handleBootstrapAdmin() {
-    try {
-      const res: any = await bootstrapFn();
-      toast.success(res?.created ? "Usuário 'admin' criado!" : "Usuário 'admin' sincronizado.");
-      refresh();
-    } catch (err: any) { toast.error(err?.message || "Erro"); }
-  }
-
   async function openSupport() {
     setSupportOpen(true);
     setSupportLoading(true);
@@ -411,9 +401,6 @@ function SuperAdminPage() {
             <Button variant="outline" onClick={openSupport} className="rounded-full gap-2">
               <LifeBuoy className="w-4 h-4" /> Suporte
               {tenants.length === 0 ? null : null}
-            </Button>
-            <Button variant="outline" onClick={handleBootstrapAdmin} className="rounded-full gap-2 hidden sm:inline-flex">
-              <Shield className="w-4 h-4" /> Provisionar admin
             </Button>
             <Button onClick={() => setCreateOpen(true)} className="rounded-full gap-2 shadow-lg shadow-primary/20">
               <Plus className="w-4 h-4" /> Nova conta
